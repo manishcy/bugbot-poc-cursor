@@ -14,14 +14,13 @@ provider "aws" {
 }
 
 locals {
-  name = "${var.environment}-${var.project_name}"
+  name = var.name
 
   common_tags = merge(
     var.common_tags,
     {
-      Environment = var.environment
-      Project     = var.project_name
-      ManagedBy   = "terraform"
+      NamePrefix = var.name
+      ManagedBy  = "terraform"
     }
   )
 }
