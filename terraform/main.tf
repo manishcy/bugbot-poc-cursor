@@ -1,5 +1,5 @@
 resource "aws_security_group" "bad_sg" {
-  name = "bad_sg"
+  name = "baad_sg"
 
   ingress {
     from_port   = 22
