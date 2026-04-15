@@ -17,7 +17,9 @@ if (tf.includes("0.0.0.0/0")) {
 
 // Kubernetes scan
 const k8s = fs.readFileSync("./k8s/deployment.yaml", "utf-8");
-if (!k8s.includes("limits")) {
+// Ignore YAML comments so the check only looks at config keys.
+const k8sWithoutComments = k8s.replace(/^\s*#.*$/gm, "");
+if (!/^\s*limits\s*:/m.test(k8sWithoutComments)) {
   findings.push({
     file: "deployment.yaml",
     issue: "Missing resource limits",
