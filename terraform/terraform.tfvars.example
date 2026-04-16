@@ -1,0 +1,18 @@
+aws_region = "us-east-1"
+
+project_name = "web-network"
+vpc_cidr     = "10.0.0.0/16"
+
+# Optional: leave empty to auto-select the first two AZs in the chosen region.
+azs = []
+
+public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24"]
+private_subnet_cidrs = ["10.0.101.0/24", "10.0.102.0/24"]
+
+allowed_web_cidrs = ["0.0.0.0/0"]
+
+tags = {
+  Environment = "dev"
+  Terraform   = "true"
+  Project     = "web-network"
+}
