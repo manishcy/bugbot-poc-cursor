@@ -3,10 +3,10 @@ kind: Deployment
 metadata:
   name: insecure-app
 spec:
-  replicas: 1
+  replicas: 2
   template:
     spec:
       containers:
         - name: app
           image: nginx
-          # ❌ no limits
+       
