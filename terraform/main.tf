@@ -1,10 +1,15 @@
-resource "aws_security_group" "bad_sg" {
-  name = "bad_sg"
+provider "aws" {
+  region = var.aws_region
+}
 
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # ❌ insecure
-  }
+module "network" {
+  source = "../modules/network"
+
+  project_name         = var.project_name
+  vpc_cidr             = var.vpc_cidr
+  azs                  = var.azs
+  public_subnet_cidrs  = var.public_subnet_cidrs
+  private_subnet_cidrs = var.private_subnet_cidrs
+  allowed_web_cidrs    = var.allowed_web_cidrs
+  tags                 = var.tags
 }
