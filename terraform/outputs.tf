@@ -23,6 +23,16 @@ output "nat_gateway_id" {
   value       = module.network.nat_gateway_id
 }
 
+output "public_route_table_id" {
+  description = "ID of the public route table."
+  value       = module.network.public_route_table_id
+}
+
+output "private_route_table_id" {
+  description = "ID of the private route table."
+  value       = module.network.private_route_table_id
+}
+
 output "web_security_group_id" {
   description = "ID of the web server security group."
   value       = module.web_security_group.security_group_id
