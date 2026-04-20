@@ -33,6 +33,11 @@ variable "public_subnet_cidrs" {
     condition     = length(var.public_subnet_cidrs) == 2
     error_message = "Exactly two public subnet CIDRs must be provided."
   }
+
+  validation {
+    condition     = alltrue([for cidr in var.public_subnet_cidrs : can(cidrhost(cidr, 0))])
+    error_message = "All public_subnet_cidrs must be valid IPv4 CIDRs."
+  }
 }
 
 variable "private_subnet_cidrs" {
@@ -43,6 +48,11 @@ variable "private_subnet_cidrs" {
   validation {
     condition     = length(var.private_subnet_cidrs) == 2
     error_message = "Exactly two private subnet CIDRs must be provided."
+  }
+
+  validation {
+    condition     = alltrue([for cidr in var.private_subnet_cidrs : can(cidrhost(cidr, 0))])
+    error_message = "All private_subnet_cidrs must be valid IPv4 CIDRs."
   }
 }
 
@@ -62,6 +72,29 @@ variable "single_nat_gateway" {
   description = "Use a single NAT Gateway instead of one per AZ (cost optimisation)."
   type        = bool
   default     = true
+}
+
+variable "enable_flow_logs" {
+  description = "Whether to enable VPC Flow Logs for network monitoring."
+  type        = bool
+  default     = true
+}
+
+variable "flow_log_retention_days" {
+  description = "Number of days to retain VPC Flow Logs in CloudWatch."
+  type        = number
+  default     = 90
+
+  validation {
+    condition     = contains([0, 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1096, 1827, 2192, 2557, 2922, 3288, 3653], var.flow_log_retention_days)
+    error_message = "flow_log_retention_days must be a valid CloudWatch Logs retention value."
+  }
+}
+
+variable "map_public_ip_on_launch" {
+  description = "Whether public subnets auto-assign public IPs. Set to false to control public IPs via EIP or ALB instead."
+  type        = bool
+  default     = false
 }
 
 variable "tags" {

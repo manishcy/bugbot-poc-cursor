@@ -43,32 +43,49 @@ resource "aws_security_group" "web" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "http" {
+  for_each = toset(var.web_ingress_cidr_ipv4)
+
   security_group_id = aws_security_group.web.id
-  description       = "Allow HTTP"
+  description       = "Allow HTTP from ${each.value}"
   from_port         = 80
   to_port           = 80
   ip_protocol       = "tcp"
-  cidr_ipv4         = "0.0.0.0/0"
+  cidr_ipv4         = each.value
 
   tags = merge(var.tags, { Name = "${var.project_name}-http-ingress" })
 }
 
 resource "aws_vpc_security_group_ingress_rule" "https" {
+  for_each = toset(var.web_ingress_cidr_ipv4)
+
   security_group_id = aws_security_group.web.id
-  description       = "Allow HTTPS"
+  description       = "Allow HTTPS from ${each.value}"
+  from_port         = 443
+  to_port           = 443
+  ip_protocol       = "tcp"
+  cidr_ipv4         = each.value
+
+  tags = merge(var.tags, { Name = "${var.project_name}-https-ingress" })
+}
+
+resource "aws_vpc_security_group_egress_rule" "https_out" {
+  security_group_id = aws_security_group.web.id
+  description       = "Allow outbound HTTPS (API calls, package updates)"
   from_port         = 443
   to_port           = 443
   ip_protocol       = "tcp"
   cidr_ipv4         = "0.0.0.0/0"
 
-  tags = merge(var.tags, { Name = "${var.project_name}-https-ingress" })
+  tags = merge(var.tags, { Name = "${var.project_name}-https-egress" })
 }
 
-resource "aws_vpc_security_group_egress_rule" "all_outbound" {
+resource "aws_vpc_security_group_egress_rule" "http_out" {
   security_group_id = aws_security_group.web.id
-  description       = "Allow all outbound traffic"
-  ip_protocol       = "-1"
+  description       = "Allow outbound HTTP (package mirrors, redirects)"
+  from_port         = 80
+  to_port           = 80
+  ip_protocol       = "tcp"
   cidr_ipv4         = "0.0.0.0/0"
 
-  tags = merge(var.tags, { Name = "${var.project_name}-all-egress" })
+  tags = merge(var.tags, { Name = "${var.project_name}-http-egress" })
 }

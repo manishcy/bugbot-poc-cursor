@@ -40,6 +40,17 @@ variable "single_nat_gateway" {
   default     = true
 }
 
+variable "web_ingress_cidr_ipv4" {
+  description = "IPv4 CIDR blocks allowed to reach the web security group. Restrict to known ranges in production."
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+
+  validation {
+    condition     = alltrue([for cidr in var.web_ingress_cidr_ipv4 : can(cidrhost(cidr, 0))])
+    error_message = "All entries in web_ingress_cidr_ipv4 must be valid IPv4 CIDRs."
+  }
+}
+
 variable "tags" {
   description = "Tags applied to every resource."
   type        = map(string)
