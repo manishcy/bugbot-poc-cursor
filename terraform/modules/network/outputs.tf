@@ -18,7 +18,7 @@ output "internet_gateway_id" {
   value       = aws_internet_gateway.this.id
 }
 
-output "nat_gateway_id" {
-  description = "ID of the NAT gateway."
-  value       = aws_nat_gateway.this.id
+output "nat_gateway_ids" {
+  description = "IDs of NAT gateways keyed by subnet index."
+  value       = { for key, nat in aws_nat_gateway.this : key => nat.id }
 }

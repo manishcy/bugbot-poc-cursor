@@ -18,9 +18,9 @@ output "internet_gateway_id" {
   value       = module.network.internet_gateway_id
 }
 
-output "nat_gateway_id" {
-  description = "ID of the NAT gateway."
-  value       = module.network.nat_gateway_id
+output "nat_gateway_ids" {
+  description = "Map of NAT gateway IDs keyed by subnet index."
+  value       = module.network.nat_gateway_ids
 }
 
 output "web_security_group_id" {
