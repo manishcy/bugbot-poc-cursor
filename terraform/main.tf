@@ -1,10 +1,18 @@
-resource "aws_security_group" "bad_sg" {
-  name = "bad_sg"
+module "network" {
+  source = "./modules/network"
 
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # ❌ insecure
-  }
+  project_name         = var.project_name
+  vpc_cidr             = var.vpc_cidr
+  availability_zones   = var.availability_zones
+  public_subnet_cidrs  = var.public_subnet_cidrs
+  private_subnet_cidrs = var.private_subnet_cidrs
+  common_tags          = var.common_tags
+}
+
+module "web_security_group" {
+  source = "./modules/security_group"
+
+  project_name = var.project_name
+  vpc_id       = module.network.vpc_id
+  common_tags  = var.common_tags
 }
