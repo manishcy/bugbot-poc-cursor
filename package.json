@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node bot/bugbot.js"
+    "test": "REPORT_PATH=/tmp/bugbot-findings.json node bot/bugbot.js"
   },
   "keywords": [],
   "author": "",

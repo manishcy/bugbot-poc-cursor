@@ -2,6 +2,7 @@ const fs = require("fs");
 const axios = require("axios");
 
 const WEBHOOK = process.env.SLACK_WEBHOOK;
+const REPORT_PATH = process.env.REPORT_PATH || "./report/findings.json";
 
 let findings = [];
 
@@ -28,7 +29,7 @@ if (!/^\s*limits\s*:/m.test(k8sWithoutComments)) {
 }
 
 // Save report
-fs.writeFileSync("./report/findings.json", JSON.stringify(findings, null, 2));
+fs.writeFileSync(REPORT_PATH, JSON.stringify(findings, null, 2));
 
 // Send to Slack
 async function sendToSlack() {
