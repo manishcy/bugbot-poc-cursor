@@ -1,1 +1,12 @@
-
+[
+  {
+    "file": "main.tf",
+    "issue": "Open Security Group (0.0.0.0/0)",
+    "severity": "HIGH"
+  },
+  {
+    "file": "deployment.yaml",
+    "issue": "Missing resource limits",
+    "severity": "MEDIUM"
+  }
+]
